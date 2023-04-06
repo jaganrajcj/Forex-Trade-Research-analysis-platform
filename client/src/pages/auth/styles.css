@@ -1,0 +1,80 @@
+body,
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  height: 100vh;
+}
+
+.auth-page-container {
+  height: 100vh;
+  background-image: url("./bg2.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: scaleX(-1);
+}
+
+.content-container {
+  overflow-y: scroll;
+  height: 100%;
+  transform: scaleX(-1);
+  background-image: linear-gradient(
+    to right top,
+    rgba(39, 42, 55, 1) 50%,
+    rgba(39, 42, 55, 0.95) 55%,
+    rgba(39, 42, 55, 0.9) 60%,
+    rgba(39, 42, 55, 0.8) 70%,
+    rgba(39, 42, 55, 0.7) 75%,
+    rgba(39, 42, 55, 0.5) 80%,
+    rgba(39, 42, 55, 0.1) 85%
+      /* rgba(4, 8, 19, 1) 50%,
+    rgba(4, 8, 19, 0.95) 55%,
+    rgba(4, 8, 19, 0.9) 60%,
+    rgba(4, 8, 19, 0.8) 70%,
+    rgba(4, 8, 19, 0.7) 75%,
+    rgba(4, 8, 19, 0.5) 80%,
+    rgba(4, 8, 19, 0.1) 85% */
+  );
+}
+
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #323644 inset !important;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.otp-input {
+  border: 2px solid #323644;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  background: rgba(39, 42, 55, 1);
+  /* width: 100px; */
+  border-radius: 15px;
+  margin-right: 20px;
+}
+.otp-input:focus {
+  outline: none;
+  border: 2px solid rgb(59 130 246) !important;
+}
+
+input:-webkit-autofill {
+  -webkit-text-fill-color: #f8fafc !important;
+}

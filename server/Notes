@@ -1,0 +1,12 @@
+p1001 = Unauthorized
+
+
+
+
+User types
+==============
+
+Roles
+2000 - normal user
+2300 - moderator
+2400 - admin
