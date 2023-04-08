@@ -12,9 +12,11 @@ import axios from 'axios'
 import UserContext from './context/userContext';
 
 // Import pages
-import Dashboard from './pages/Dashboard';
 import Layout from './partials/Layout';
-import Login from './pages/Auth/Login';
+const DashboardPages = React.lazy(() => import('./pages'))
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
+const Login = React.lazy(() => import('./pages/Auth/Login'))
+// import Login from './pages/Auth/Login';
 
 function App() {
 
@@ -95,11 +97,12 @@ function App() {
         <UserContext.Provider value={{ userData, setUserData, user }}>
           <Suspense>
             <Routes>
-              <Route path={'/'} element={<Layout />} >
+              {/* <Route path={'/'} element={<Layout />} >
                 {routes.map((route) => (
-                  <Route key={route.path} path={route.path} element={route.component} />
+                  <Route key={route.path} path={route.path + '/*'} element={route.component} />
                 ))}
-              </Route>
+              </Route> */}
+              <Route path="/*" element={<DashboardPages />} />
               <Route path={'/login'} element={<Login />} />
             </Routes>
 

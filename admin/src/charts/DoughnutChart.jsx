@@ -97,7 +97,7 @@ function DoughnutChart({
     });
     return () => chart.destroy();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [data]);
 
   return (
     <div className="grow flex flex-col justify-center">

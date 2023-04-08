@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import Sidebar from './Sidebar'
 
-const Layout = () => {
+const Layout = ({ children }) => {
 
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -13,8 +13,8 @@ const Layout = () => {
 
             <div className="relative flex flex-col flex-1 overflow-y-auto overflow-x-hidden">
                 <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-                <Outlet />
-
+                {/* <Outlet /> */}
+                {children}
             </div>
         </div>
     )

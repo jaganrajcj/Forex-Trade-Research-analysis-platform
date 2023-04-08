@@ -45,7 +45,6 @@ function DashboardCard03({ stat }) {
 
       const dataSet = stat?.sales?.salesData?.map(data => data.count);
       const dates = stat?.sales?.salesData?.map(data => data.month)
-      console.log(dates)
 
 
       const oldState = { ...chartData }

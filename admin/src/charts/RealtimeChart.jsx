@@ -30,40 +30,6 @@ function RealtimeChart({
         layout: {
           padding: 20,
         },
-        scales: {
-          y: {
-            border: {
-              display: false,
-            },
-            suggestedMin: 30,
-            suggestedMax: 80,
-            ticks: {
-              maxTicksLimit: 5,
-              callback: (value) => formatValue(value),
-            },
-          },
-          x: {
-            type: 'time',
-            time: {
-              parser: 'hh:mm:ss',
-              unit: 'second',
-              tooltipFormat: 'MMM DD, H:mm:ss a',
-              displayFormats: {
-                second: 'H:mm:ss',
-              },
-            },
-            border: {
-              display: false,
-            },
-            grid: {
-              display: false,
-            },
-            ticks: {
-              autoSkipPadding: 48,
-              maxRotation: 0,
-            },
-          },
-        },
         plugins: {
           legend: {
             display: false,

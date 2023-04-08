@@ -47,7 +47,6 @@ function DashboardCard01({ stat }) {
         tempArr.push(doc.count);
       });
       setDataSet(tempArr);
-      console.log(tempArr)
 
       const updatedChartConfig = { ...chartConfig };
 
@@ -59,10 +58,6 @@ function DashboardCard01({ stat }) {
 
     }
   }, [stat]);
-
-  useEffect(() => {
-    console.log(chartConfig)
-  }, [chartConfig])
 
 
 

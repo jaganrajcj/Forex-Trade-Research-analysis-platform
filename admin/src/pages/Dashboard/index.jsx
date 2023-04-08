@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import CircularLoader from '@/partials/CircularLoader'
 
 import Sidebar from '../../partials/Sidebar';
 import Header from '../../partials/Header';
@@ -29,82 +30,95 @@ function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { userData } = useAuth()
   const [stat, setStat] = useState({})
+  const [data, setData] = useState({})
+  const [isLoading, setIsLoading] = useState(true)
 
   const getStat = async () => {
     const res = await dashboardServices.getStatCardData(userData)
-    console.log(res)
+
+    const dashStat = await dashboardServices.getDashboardInfo(userData)
+    setData(dashStat)
     setStat(res)
+
+    setTimeout(() => {
+      setIsLoading(false)
+    }, 1000)
+    console.log(dashStat)
+
   }
   useEffect(() => {
     getStat()
   }, [])
 
   return (
-    <>
-      <main>
-        <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
+    !isLoading ?
+      <>
+        <main>
+          <div className="px-4 sm:px-6 lg:px-8 py-8 w-full max-w-9xl mx-auto">
 
-          {/* Welcome banner */}
-          <WelcomeBanner />
+            {/* Welcome banner */}
+            <WelcomeBanner />
 
-          {/* Dashboard actions */}
-          <div className="sm:flex sm:justify-between sm:items-center mb-8">
+            {/* Dashboard actions */}
+            <div className="sm:flex sm:justify-between sm:items-center mb-8">
 
-            {/* Left: Avatars */}
-            {/* <DashboardAvatars /> */}
+              {/* Left: Avatars */}
+              {/* <DashboardAvatars /> */}
 
-            {/* Right: Actions */}
-            <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
-              {/* Filter button */}
-              {/* <FilterButton /> */}
-              {/* Datepicker built with flatpickr */}
-              {/* <Datepicker /> */}
-              {/* Add view button */}
-              <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white">
-                <svg className="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
-                  <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
-                </svg>
-                <span className="hidden xs:block ml-2">Get Report</span>
-              </button>
+              {/* Right: Actions */}
+              <div className="grid grid-flow-col sm:auto-cols-max justify-start sm:justify-end gap-2">
+                {/* Filter button */}
+                {/* <FilterButton /> */}
+                {/* Datepicker built with flatpickr */}
+                {/* <Datepicker /> */}
+                {/* Add view button */}
+                <button className="btn bg-indigo-500 hover:bg-indigo-600 text-white">
+                  <svg className="w-4 h-4 fill-current opacity-50 shrink-0" viewBox="0 0 16 16">
+                    <path d="M15 7H9V1c0-.6-.4-1-1-1S7 .4 7 1v6H1c-.6 0-1 .4-1 1s.4 1 1 1h6v6c0 .6.4 1 1 1s1-.4 1-1V9h6c.6 0 1-.4 1-1s-.4-1-1-1z" />
+                  </svg>
+                  <span className="hidden xs:block ml-2">Get Report</span>
+                </button>
+              </div>
+
+            </div>
+
+            {/* Cards */}
+            <div className="grid grid-cols-12 gap-6">
+
+              {/* Line chart (Acme Plus) */}
+              <DashboardCard01 stat={stat} />
+              {/* Line chart (Acme Advanced) */}
+              <DashboardCard02 stat={stat} />
+              {/* Line chart (Acme Professional) */}
+              <DashboardCard03 stat={stat} />
+              {/* Bar chart (Direct vs Indirect) */}
+              <DashboardCard04 stat={stat} />
+              {/* Line chart (Real Time Value) */}
+              <DashboardCard05 data={data?.sales} />
+              {/* Doughnut chart (Top Countries) */}
+              <DashboardCard06 data={data?.topCountries} />
+              {/* Table (Top Channels) */}
+              <DashboardCard07 data={data?.recentTransactions} />
+              {/* Line chart (Sales Over Time) */}
+
+              {/* <DashboardCard08 /> */}
+              {/* Stacked bar chart (Sales VS Refunds) */}
+              {/* <DashboardCard09 /> */}
+              {/* Card (Customers) */}
+              {/* <DashboardCard10 /> */}
+              {/* Card (Reasons for Refunds) */}
+              {/* <DashboardCard11 /> */}
+              {/* Card (Recent Activity) */}
+              {/* <DashboardCard12 /> */}
+              {/* Card (Income/Expenses) */}
+              {/* <DashboardCard13 /> */}
+
             </div>
 
           </div>
-
-          {/* Cards */}
-          <div className="grid grid-cols-12 gap-6">
-
-            {/* Line chart (Acme Plus) */}
-            <DashboardCard01 stat={stat} />
-            {/* Line chart (Acme Advanced) */}
-            <DashboardCard02 stat={stat} />
-            {/* Line chart (Acme Professional) */}
-            <DashboardCard03 stat={stat} />
-            {/* Bar chart (Direct vs Indirect) */}
-            <DashboardCard04 stat={stat} />
-            {/* Line chart (Real Time Value) */}
-            <DashboardCard05 />
-            {/* Doughnut chart (Top Countries) */}
-            <DashboardCard06 />
-            {/* Table (Top Channels) */}
-            <DashboardCard07 />
-            {/* Line chart (Sales Over Time) */}
-            <DashboardCard08 />
-            {/* Stacked bar chart (Sales VS Refunds) */}
-            <DashboardCard09 />
-            {/* Card (Customers) */}
-            <DashboardCard10 />
-            {/* Card (Reasons for Refunds) */}
-            <DashboardCard11 />
-            {/* Card (Recent Activity) */}
-            <DashboardCard12 />
-            {/* Card (Income/Expenses) */}
-            <DashboardCard13 />
-
-          </div>
-
-        </div>
-      </main>
-    </>
+        </main>
+      </>
+      : <CircularLoader />
 
   );
 }

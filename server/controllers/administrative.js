@@ -1,13 +1,12 @@
 import jwt from "jsonwebtoken"
 import UserInfo from '../models/UserInfo.js'
 import User from '../models/User.js'
+import PremiumUser from "../models/PremiumUsers.js"
 
 
 export const getUsers = async (req, res) => {
     try {
         const users = await User.find().select(['-password', '-__v', '-updatedAt'])
-
-        // const userInfo = await UserInfo.find().select(['-createdAt', '-__v', '-updatedAt'])
 
         const usersWithInfo = await Promise.all(
             users.map(async (user) => {
@@ -31,24 +30,119 @@ export const getUsers = async (req, res) => {
             else newUser.push(user)
 
         })
-        // console.log(newUser)
-
-        // const aggregatedRes = await User.aggregate([
-        //     {
-        //         $lookup: {
-        //             from: "userinfos",
-        //             localField: "_id",
-        //             foreignField: "_id",
-        //             as: "userInfo"
-        //         }
-        //     }
-        // ])
-
 
         res.status(200).json(newUser)
     }
     catch (err) {
         console.log(err)
+    }
+}
+
+export const getProUsers = async (req, res) => {
+    try {
+        const result = await PremiumUser.aggregate([
+            // Find all documents in the premiumusers collection
+            {
+                $match: {}
+            },
+            // Look up userinfos and users documents based on userId
+            {
+                $lookup: {
+                    from: 'userinfos',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'userinfo'
+                }
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    let: { userId: '$userId' },
+                    pipeline: [
+                        { $match: { $expr: { $eq: ['$_id', '$$userId'] } } },
+                        { $project: { name: 1, email: 1, createdAt: 1 } }
+                    ],
+                    as: 'user'
+                }
+            },
+            // Unwind the arrays returned by the lookups
+            {
+                $unwind: '$userinfo'
+            },
+            {
+                $unwind: '$user'
+            },
+            // Merge the userinfo and user objects into a single output object
+            {
+                $replaceRoot: {
+                    newRoot: {
+                        $mergeObjects: [
+                            '$userinfo',
+                            { isPremium: '$isPremium', name: '$user.name', email: '$user.email', createdAt: '$user.createdAt' }
+                        ]
+                    }
+                }
+            }
+        ])
+        res.status(200).json(result)
+    }
+    catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: error.message })
+    }
+}
+
+export const getAdminUsers = async (req, res) => {
+    try {
+        const result = await User.aggregate([
+            // Match users with role "admin"
+            {
+                $match: { role: "admin" }
+            },
+            // Join with userinfos collection based on the _id field
+            {
+                $lookup: {
+                    from: "userinfos",
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "userinfo"
+                }
+            },
+            // Unwind the userinfo array
+            {
+                $unwind: "$userinfo"
+            },
+            // Project the desired fields
+            {
+                $project: {
+                    _id: 1,
+                    email: 1,
+                    name: 1,
+                    createdAt: 1,
+                    userinfo: 1
+                }
+            },
+            // Merge the userinfo object into the parent object
+            {
+                $replaceRoot: {
+                    newRoot: {
+                        $mergeObjects: ["$userinfo", "$$ROOT"]
+                    }
+                }
+            },
+            // Remove the userinfo field
+            {
+                $project: {
+                    userinfo: 0
+                }
+            }
+        ])
+
+        res.status(200).json(result)
+    }
+    catch (error) {
+        console.log(error.message)
+        res.status(500).json({ error: error.message })
     }
 }
 
