@@ -180,3 +180,13 @@ export const getTradeSummary = async (req, res) => {
         res.status(403).json({ status: false, message: 'Error fetching trade summary' })
     }
 }
+
+export const getOverviewChartData = (req, res) => {
+    try {
+        const userId = req.userId
+
+    }
+    catch (err) {
+        res.status(403).json({ status: false, error: err.message })
+    }
+}

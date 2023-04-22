@@ -212,3 +212,7 @@ a[data-target-type="copyright"] {
 g[transform="translate(3,3)"] > path {
   fill: rgba(0, 0, 0, 0);
 }
+
+canvas[role="img"] {
+  width: 100%;
+}

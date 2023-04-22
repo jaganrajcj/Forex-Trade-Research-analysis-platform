@@ -28,6 +28,7 @@ import SummaryTable from './SummaryTable';
 const ProfitPerPair = React.lazy(() => import('./ProfitPerPair'))
 import ErrorBoundary from '@/components/ErrorBoundary';
 import RiskOfRuin from './RiskOfRuin';
+import { calculateLossPercentageChange, calculateMonthPercentageDifference, calculateWinPercentageChange, calculateWinRate, getTradeCountPercentageChange } from './utils'
 
 const Dashboard = () => {
 
@@ -35,12 +36,22 @@ const Dashboard = () => {
     const { userData } = useAuth()
     const theme = useGetTheme()
     const isNonMediumScreens = useMediaQuery("(min-width: 1200px)")
+    const [equityDifference, setEquityDifference] = useState(0)
+    const [tradesDiff, setTradesDiff] = useState(0)
+    const [winChange, setWinChange] = useState(0)
+    const [lossChange, setLossChange] = useState(0)
+    const [lastMonthWinRate, setLastMonthWinRate] = useState(0)
 
     useEffect(() => {
         journal.getSummary(userData).then((result) => {
             // console.log(result.data)
 
             setSummary(result.data)
+            setEquityDifference(calculateMonthPercentageDifference(result.data.trades))
+            setTradesDiff(getTradeCountPercentageChange(result.data.trades))
+            setWinChange(calculateWinPercentageChange(result.data.trades))
+            setLossChange(calculateLossPercentageChange(result.data.trades))
+            setLastMonthWinRate(calculateWinRate(result.data.trades))
 
         }).catch((error) => {
             console.log(error)
@@ -89,7 +100,7 @@ const Dashboard = () => {
                             </Typography>
                         </CardBody>
                         <CardFooter className="p-4" color="red">
-                            <Typography variant='body' sx={{ color: theme.palette.secondary[100], fontSize: '15px' }}><strong className="text-green-500">+20%</strong> From last month</Typography>
+                            <Typography variant='body' sx={{ color: theme.palette.secondary[100], fontSize: '15px' }}><strong className={`${equityDifference >= 0 ? 'text-green-500' : 'text-red-500'}`}>{`${equityDifference >= 0 ? '+' : ''}`}{equityDifference}%</strong> From last month</Typography>
                         </CardFooter>
 
                     </Card>
@@ -121,7 +132,7 @@ const Dashboard = () => {
                             </Typography>
                         </CardBody>
                         <CardFooter className="p-4" color="red">
-                            <Typography variant='body' sx={{ color: theme.palette.secondary[100], fontSize: '15px' }}><strong className="text-green-500">+15%</strong> From last month</Typography>
+                            <Typography variant='body' sx={{ color: theme.palette.secondary[100], fontSize: '15px' }}><strong className={`${tradesDiff >= 0 ? 'text-green-500' : 'text-red-500'}`}>{`${tradesDiff >= 0 ? '+' : ''}`}{tradesDiff}%</strong> From last month</Typography>
                         </CardFooter>
 
                     </Card>
@@ -170,7 +181,7 @@ const Dashboard = () => {
                             </Typography>
                         </CardBody>
                         <CardFooter className="p-4" color="red">
-                            <Typography variant='body' sx={{ color: theme.palette.secondary[100], fontSize: '15px' }}><strong className="text-green-500">+15%</strong> From last month</Typography>
+                            <Typography variant='body' sx={{ color: theme.palette.secondary[100], fontSize: '15px' }}><strong className={`${winChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>{`${winChange >= 0 ? '+' : ''}`}{winChange}%</strong> From last month</Typography>
                         </CardFooter>
 
                     </Card>
@@ -202,7 +213,7 @@ const Dashboard = () => {
                             </Typography>
                         </CardBody>
                         <CardFooter className="p-4" color="red">
-                            <Typography variant='body' sx={{ color: theme.palette.secondary[100], fontSize: '15px' }}><strong className="text-green-500">+15%</strong> From last month</Typography>
+                            <Typography variant='body' sx={{ color: theme.palette.secondary[100], fontSize: '15px' }}><strong className={`${lossChange >= 0 ? 'text-green-500' : 'text-red-500'}`}>{`${lossChange >= 0 ? '+' : ''}`}{lossChange}%</strong> From last month</Typography>
                         </CardFooter>
 
                     </Card>
@@ -236,7 +247,7 @@ const Dashboard = () => {
                             </Typography>
                         </CardBody>
                         <CardFooter className="p-4" color="red">
-                            <Typography variant='body' sx={{ color: theme.palette.secondary[100], fontSize: '15px' }}>Last month: <strong className="text-blue-500">54%</strong></Typography>
+                            <Typography variant='body' sx={{ color: theme.palette.secondary[100], fontSize: '15px' }}>Last month: <strong className="text-blue-500">{lastMonthWinRate}%</strong></Typography>
                         </CardFooter>
 
                     </Card>

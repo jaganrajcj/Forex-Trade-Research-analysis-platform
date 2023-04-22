@@ -21,6 +21,7 @@ import Technical from './Technical';
 import InterestRates from './InterestRates';
 import BiasGuage from './BiasGuage';
 import Chart from './Chart';
+import BiasGuage2 from './BiasGuage2';
 
 const Fundamental = () => {
 
@@ -249,7 +250,8 @@ const Fundamental = () => {
                     sx={{ boxShadow: 3, borderRadius: '.7rem', p: '1rem', }}
                 >
                     <ErrorBoundary fallback={<>Error occured while loading compoenent</>}>
-                        <BiasGuage selectedPair={selectedPair} setSnackbar={setSnackbar} />
+                        {/* <BiasGuage selectedPair={selectedPair} setSnackbar={setSnackbar} /> */}
+                        <BiasGuage2 selectedPair={selectedPair} />
                     </ErrorBoundary>
                 </Box>
                 <Box

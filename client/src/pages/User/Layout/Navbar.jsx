@@ -59,7 +59,7 @@ const DashboardNavbar = ({ isNonMobile, mode, user, isSidebarOpen, setIsSideBarO
                 ? "sticky top-4 z-40 py-3"
                 : "px-0 py-1"
                 }
-                ${isSidebarOpen ? "ml-[20rem]" : 'ml-7'}
+                ${isSidebarOpen ? "ml-[18rem]" : 'ml-7'}
                 
                 `}
             fullWidth

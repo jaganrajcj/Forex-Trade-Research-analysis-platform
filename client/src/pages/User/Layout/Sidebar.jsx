@@ -52,11 +52,11 @@ const routes = [
         name: "Journal",
         path: "/journal",
       },
-      {
-        icon: <SummarizeIcon {...icon} />,
-        name: "Summary",
-        path: "/summary",
-      },
+      // {
+      //   icon: <SummarizeIcon {...icon} />,
+      //   name: "Summary",
+      //   path: "/summary",
+      // },
       {
         icon: <ShowChartIcon {...icon} />,
         name: "Equity Curve",
@@ -75,11 +75,11 @@ const routes = [
         name: "Fundamentals",
         path: "/fundamental",
       },
-      {
-        icon: <BiotechIcon {...icon} />,
-        name: "Technical",
-        path: "/technical",
-      },
+      // {
+      //   icon: <BiotechIcon {...icon} />,
+      //   name: "Technical",
+      //   path: "/technical",
+      // },
     ],
   },
   {
@@ -147,8 +147,9 @@ const Sidebar = ({ isSidebarOpen, isNonMobile, mode }) => {
 
   return (
     <aside
-      className={`${mode === "dark" ? 'bg-[#11101d]' : 'bg-[#f3f6fd]'}
-       fixed inset-0 z-50 my-4 ml-4 overflow-y-auto scrollbar-thin scrollbar-thumb-[#359AEF] scrollbar-track-[${theme.palette.custom[300]}] scrollbar-thumb-rounded-md w-72 rounded-xl duration-300 
+      // ${mode === "dark" ? 'bg-[#11101d]' : 'bg-[#f3f6fd]'}
+      className={`
+       fixed inset-0 z-50 my-4 ml-4 overflow-y-auto scrollbar-thin scrollbar-thumb-[#359AEF] scrollbar-track-[${theme.palette.custom[300]}] scrollbar-thumb-rounded-md w-64 rounded-xl duration-300 
       ${!isSidebarOpen ? '-translate-x-80' : null} transition-all`}
     >
       <div

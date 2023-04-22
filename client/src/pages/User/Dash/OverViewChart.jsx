@@ -1,228 +1,121 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useTheme } from "@mui/material"
 import useGetTheme from '@/hooks/useGetTheme'
 import { ResponsiveLine } from '@nivo/line'
 import { data } from './data'
 import { useSelector } from 'react-redux'
+import Chart from "chart.js/auto";
+import { Line } from "react-chartjs-2";
 
+
+function getBalancesByMonth(trades) {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const currentDate = new Date();
+    const result = new Array(12).fill(0);
+    let lastNonZeroBalance = null;
+
+    for (let i = 11; i >= 0; i--) {
+        const month = currentDate.getMonth() - i;
+        const year = currentDate.getFullYear();
+
+        let monthBalances = trades
+            .filter(trade => new Date(trade.date).getMonth() === month && new Date(trade.date).getFullYear() === year)
+            .map(trade => trade.balance);
+
+        if (monthBalances.length === 0) {
+            if (lastNonZeroBalance !== null) {
+                result[i] = lastNonZeroBalance;
+            }
+        } else {
+            let lastBalance = monthBalances[monthBalances.length - 1];
+            if (lastBalance !== 0) {
+                lastNonZeroBalance = lastBalance;
+            }
+            result[i] = lastBalance;
+        }
+    }
+
+    return result.reverse();
+}
 
 const OverviewChart = ({ summary }) => {
 
     const theme = useGetTheme()
     const mode = useSelector((state) => state.global.mode)
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
     const [data2, setData] = useState([])
 
     useEffect(() => {
-        try {
-
-            if (summary) {
-
-                let monthlyData = []
-                let chartData = []
-                // console.log("🚀 ~ file: OverViewChart.jsx:21 ~ useEffect ~ summary:", summary)
-
-                if (true) {
-                    for (let i = 1; i <= 12; i++) {
-                        const trades = summary["trades"].filter(obj => new Date(obj.date).getMonth() === i - 1);
-
-                        monthlyData.push({ month: i, trades })
-                    }
-
-                    monthlyData.forEach((data) => {
-                        // console.log(data.month, data.trades)
-                    })
-                }
-                let months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-
-                const getBalanceFromArray = (arr) => {
-                    // console.log("Data array: ", arr)
-                    let lastTrade = arr.trades[arr.trades.length - 1]
-                    return lastTrade?.balance
-                }
-
-                monthlyData.forEach((data) => {
-                    // console.log(data)
-                    chartData.push({
-                        "x": months[data.month - 1],
-                        "y": getBalanceFromArray(data)
-                    })
-                })
-
-                const getFirstDataValue = (arr) => {
-                    for (let i = 0; i < arr.length; i++) {
-                        if (arr[i].y != undefined) {
-                            return arr[i].y
-                        }
-                    }
-                }
-                for (let i = 0; i < chartData.length; i++) {
-                    if (chartData[i].x == 'jan' && chartData[i].y == undefined)
-                        chartData[i].y = getFirstDataValue(chartData);
-                    else {
-                        if (chartData[i].y == undefined)
-                            chartData[i].y = chartData[i - 1].y
-                    }
-                }
-
-                setData([{
-                    "id": 'Equity',
-                    "color": "hsl(21, 70%, 50%)",
-                    "data": chartData
-                }])
-                // console.log(chartData)
-                // console.log(monthlyData)
-            }
-            setIsLoading(false)
-        }
-        catch (err) {
-            console.log(err.message)
+        // console.log(summary)
+        if (summary?.trades?.length > 0) {
+            console.log('chartData', getBalancesByMonth(summary.trades))
+            setData(getBalancesByMonth(summary.trades))
         }
     }, [summary])
 
+    function getLast12MonthsShort() {
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const currentDate = new Date();
+        const result = [];
 
-    const nivoTheme = {
-        "background": 'transparent',
-        "textColor": theme.palette.secondary[100],
-        "fontSize": 11,
-        "axis": {
-            "domain": {
-                "line": {
-                    "stroke": "#777777",
-                    "strokeWidth": 1
-                }
+        for (let i = 11; i >= 0; i--) {
+            const d = new Date(currentDate.getFullYear(), currentDate.getMonth() - i, 1);
+            result.push(months[d.getMonth()]);
+        }
+
+        return result;
+    }
+
+    const labels = getLast12MonthsShort()
+
+    const data = {
+        labels: labels,
+        datasets: [
+            {
+                label: null,
+                backgroundColor: "rgb(50,152,238)",
+                borderColor: "rgb(50,152,238)",
+
+                data: data2
             },
-            "legend": {
-                "text": {
-                    "fontSize": 12,
-                    "fill": mode === "light" ? theme.palette.secondary[300] : theme.palette.secondary[600]
+        ],
+    };
+    const options = {
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                display: false,
+                labels: {
+                    color: 'rgb(50,152,238)'
                 }
-            },
-            "ticks": {
-                "line": {
-                    "stroke": "#777777",
-                    "strokeWidth": 1
+            }
+        },
+        scales: {
+            x: {
+                ticks: {
+                    color: theme.palette.secondary[200]
                 },
-                "text": {
-                    "fontSize": 11,
-                    "fill": theme.palette.secondary[100]
+                grid: {
+                    color: mode === 'light' ? 'rgba(82, 82, 91, 0.2)' : 'rgba(100, 116, 139, 0.2)'
+                }
+
+            },
+            y: {
+                ticks: {
+                    color: theme.palette.secondary[200]
+                },
+                grid: {
+                    color: mode === 'light' ? 'rgba(82, 82, 91, 0.2)' : 'rgba(100, 116, 139, 0.2)'
                 }
             }
-        },
-        "grid": {
-            "line": {
-                "stroke": mode === 'light' ? theme.palette.secondary[400] : '#333',
-                "strokeWidth": 1
-            }
-        },
-        "legends": {
-            "title": {
-                "text": {
-                    "fontSize": 11,
-                    "fill": "#333333"
-                }
-            },
-            "text": {
-                "fontSize": 11,
-                "fill": "#333333"
-            },
-            "ticks": {
-                "line": {},
-                "text": {
-                    "fontSize": 10,
-                    "fill": "#333333"
-                }
-            }
-        },
-        "annotations": {
-            "text": {
-                "fontSize": 13,
-                "fill": "#333333",
-                "outlineWidth": 2,
-                "outlineColor": "#ffffff",
-                "outlineOpacity": 1
-            },
-            "link": {
-                "stroke": "#000000",
-                "strokeWidth": 1,
-                "outlineWidth": 2,
-                "outlineColor": "#ffffff",
-                "outlineOpacity": 1
-            },
-            "outline": {
-                "stroke": "#000000",
-                "strokeWidth": 2,
-                "outlineWidth": 2,
-                "outlineColor": "#ffffff",
-                "outlineOpacity": 1
-            },
-            "symbol": {
-                "fill": "#000000",
-                "outlineWidth": 2,
-                "outlineColor": "#ffffff",
-                "outlineOpacity": 1
-            }
-        },
-        "tooltip": {
-            "container": {
-                "background": "#ffffff",
-                "color": "#333333",
-                "fontSize": 12
-            },
-            "basic": {},
-            "chip": {},
-            "table": {},
-            "tableCell": {},
-            "tableCellValue": {}
         }
     }
 
     return (
         !isLoading &&
-        <ResponsiveLine
-            data={data2 ? data2 : []}
-            theme={nivoTheme}
-            margin={{ top: 10, right: 10, bottom: 50, left: 45 }}
-            xScale={{ type: 'point' }}
-            colors={{ scheme: 'category10' }}
-            curve="cardinal"
-            yScale={{
-                type: 'linear',
-                min: 'auto',
-                max: 'auto',
-                stacked: true,
-                reverse: false
-            }}
-            yFormat=" >-.2f"
-            axisTop={null}
-            axisRight={null}
-            axisBottom={{
-                orient: 'bottom',
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: 'Month',
-                legendOffset: 36,
-                legendPosition: 'middle'
-            }}
-            axisLeft={{
-                orient: 'left',
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: 0,
-                legend: 'Equity',
-                legendOffset: -40,
-                legendPosition: 'middle'
-            }}
-            enablePoints={false}
-            pointSize={10}
-            pointColor='#32c8af'
-            pointBorderWidth={2}
-            pointBorderColor={{ from: 'serieColor' }}
-            pointLabelYOffset={-12}
-            useMesh={true}
-            legends={[]}
-        />
+        <div className="h-full w-full pb-3 relative px-0 m-0">
+            <Line data={data} options={options} width="100%" height="100%" />
+        </div>
     )
 }
 

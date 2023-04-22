@@ -121,7 +121,7 @@ const UserDashboard = () => {
             {!isLoading &&
                 <div className={`${mode === "dark" ? 'bg-[#11101d]' : 'bg-[#f3f6fd]'} h-full overflow-y-scroll scrollbar-thin scrollbar-thumb-[#359AEF] scrollbar-track-[${theme.palette.custom[300]}] scrollbar-thumb-rounded`}>
                     <Layout user={user} isSidebarOpen={isSidebarOpen} setIsSideBarOpen={setIsSideBarOpen} />
-                    <div className={`transition-all ease-in-out duration-300 mr-5 ${isSidebarOpen ? 'ml-[20rem]' : 'ml-7'} `}>
+                    <div className={`transition-all ease-in-out duration-300 mr-5 ${isSidebarOpen ? 'ml-[18rem]' : 'ml-7'} `}>
                         <Suspense fallback={<CircularLoad />}>
                             <Routes>
                                 {
