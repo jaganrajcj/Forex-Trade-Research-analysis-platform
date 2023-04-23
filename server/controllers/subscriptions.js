@@ -116,3 +116,49 @@ export const upgradeUser = async (req, res) => {
         res.status(err?.statusCode || 500).json({ error: err.message })
     }
 }
+
+export const getSubscriptionDetails = async (req, res) => {
+    try {
+
+        const userId = req.userId
+        const premiumUser = await PremiumUser.findOne({ userId: userId }).select(['plan', 'isPremium', 'validUntil', 'updatedAt', '-_id'])
+
+        if (!premiumUser) throw {
+            message: "User not found",
+            statusCode: 404
+        }
+
+        res.status(200).json(premiumUser)
+
+        // res.status(200).json({})
+    }
+    catch (err) {
+        res.status(err?.statusCode || 500).json({ error: err.message })
+    }
+}
+
+export const cancelSub = async (req, res) => {
+    try {
+
+        const userId = req.userId
+        const premiumUser = await PremiumUser.findOne({ userId: userId })
+
+        if (!premiumUser) throw {
+            message: "User not found",
+            statusCode: 404
+        }
+
+        const result = await PremiumUser.deleteMany({ userId: userId })
+
+        if (result) res.status(200).json({ status: true, message: 'Subscription cancelled!' })
+
+        else throw {
+            message: "User not found",
+            statusCode: 404
+        }
+        // res.status(200).json({})
+    }
+    catch (err) {
+        res.status(err?.statusCode || 500).json({ error: err.message })
+    }
+}

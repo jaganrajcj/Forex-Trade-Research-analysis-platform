@@ -24,7 +24,7 @@ const Premium = () => {
             {/* <Header title="SUBSCRIPTION" /> */}
             <Suspense fallback={<CircularLoad />}>
                 <Routes>
-                    <Route path="/" element={isUserPremium ? <Details /> : <Pricing />} />
+                    <Route path="/" element={isUserPremium ? <Details setIsUserPremium={setIsUserPremium} /> : <Pricing />} />
                     <Route path="upgrade-success" element={<Success setIsUserPremium={setIsUserPremium} />} />
                     <Route path="upgrade-failed" element={<Failure />} />
                     <Route path="*" element={<>Route not found</>} />
