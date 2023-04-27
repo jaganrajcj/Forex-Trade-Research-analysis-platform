@@ -7,8 +7,8 @@ import {
   IconButton,
   Typography,
 } from "@material-tailwind/react";
-import LogoLight from "@/assets/LogoLight.png"
-import LogoDark from "@/assets/LogoDark.png"
+import LogoLight from "@/assets/logoLight.png"
+import LogoDark from "@/assets/logoDark.png"
 import {
   HomeIcon,
   UserCircleIcon,
