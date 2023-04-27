@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { styles } from '../styles'
-import logoDark from '@/assets/LogoDark.png'
-import logoLight from '@/assets/LogoLight.png'
+import logoDark from '@/assets/logoDark.png'
+import logoLight from '@/assets/logoLight.png'
 import { Input } from "@material-tailwind/react";
 import { Avatar, Box, Button, Divider, IconButton, ListItemIcon, Menu, MenuItem, TextField, Typography, useTheme } from '@mui/material';
 import FlexBetween from '@/components/FlexBetween';
