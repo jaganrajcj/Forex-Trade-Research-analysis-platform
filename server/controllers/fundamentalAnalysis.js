@@ -62,6 +62,7 @@ export const updateCOT = async (req, res) => {
 
     }
     catch (err) {
+        console.log(err)
         res.status(403).json({ status: false, message: "Failed to update COT data!" })
     }
 }
