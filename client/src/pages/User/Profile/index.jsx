@@ -82,7 +82,7 @@ const Profile = () => {
                         <div className="flex items-center gap-6">
                             <div className="relative">
                                 <Avatar
-                                    src={user.profileImage ? "http://localhost:5001/user-uploads/images/" + user.profileImage : "https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg"}
+                                    src={user.profileImage ? import.meta.env.VITE_SERVER_URL + "/user-uploads/images/" + user.profileImage : "https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg"}
                                     alt="bruce-mars"
                                     size="xl"
                                     className="rounded-full shadow-md  shadow-blue-gray-500/10"

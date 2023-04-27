@@ -223,7 +223,7 @@ const DashboardNavbar = ({ isNonMobile, mode, user, isSidebarOpen, setIsSideBarO
                     <Menu className="">
                         <MenuHandler>
                             <Avatar
-                                src={user.profileImage ? "http://localhost:5001/user-uploads/images/" + user.profileImage : "https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg"}
+                                src={user.profileImage ? import.meta.env.VITE_SERVER_URL + "/user-uploads/images/" + user.profileImage : "https://thumbs.dreamstime.com/b/default-avatar-profile-vector-user-profile-default-avatar-profile-vector-user-profile-profile-179376714.jpg"}
                                 alt="item-1"
                                 size="sm"
                                 variant="circular"
