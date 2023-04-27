@@ -45,7 +45,7 @@ const UserPosts = () => {
                             posts?.map((post) => (
                                 <div className="max-w-sm w-[350px] border h-[486px] border-slate-800 rounded-lg shadow bg-slate-800 flex flex-col " key={post._id}>
                                     <a href="#">
-                                        <img className="rounded-t-lg max-h-[195px] h-[195px] object-fill w-full" src={`http://localhost:5001/trade-images/${post.imageSource}`} alt="" />
+                                        <img className="rounded-t-lg max-h-[195px] h-[195px] object-fill w-full" src={`${import.meta.env.SERVER_URL}/trade-images/${post.imageSource}`} alt="" />
                                     </a>
                                     <div className="p-5 flex flex-col justify-between h-full">
                                         {/* <EditMenu className="relative flex justify-end">
